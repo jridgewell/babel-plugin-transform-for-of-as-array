@@ -22,13 +22,14 @@ export default function({types: t }) {
         assignment = t.expressionStatement(t.assignmentExpression("=", left, item));
       }
 
-      path.get("body").unshiftContainer("body", assignment);
+      const block = t.toBlock(body);
+      block.body.unshift(assignment);
 
       path.replaceWith(t.forStatement(
         t.variableDeclaration("let", inits),
         t.binaryExpression("<", i, t.memberExpression(array, t.identifier("length"))),
         t.updateExpression("++", i),
-        body
+        block
       ));
     }
   };
