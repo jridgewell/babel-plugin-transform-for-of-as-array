@@ -2,7 +2,6 @@ export default function({types: t }) {
   const visitor = {
     ForOfStatement(path) {
       const { scope } = path;
-
       const { left, right, body} = path.node;
       const i = scope.generateUidIdentifier("i");
       let array = scope.maybeGenerateMemoised(right, true);

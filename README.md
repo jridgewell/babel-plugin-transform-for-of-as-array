@@ -7,12 +7,13 @@ Transform all for-of loops into the equivalent array for loop
 **In**
 
 ```js
+const array = [1, 2, 3];
 for (const elm of array) {
   console.log(elm);
 }
 
 let item;
-for ({ item } of array) {
+for ({ item } of array.map(item => ({ item }))) {
   console.log(item);
 }
 ```
@@ -20,14 +21,17 @@ for ({ item } of array) {
 **Out**
 
 ```js
-for (let _i = 0, _array = array; _i < _array.length; _i++) {
-  const elm = _array[_i];
+const array = [1, 2, 3];
+
+for (let _i = 0; _i < array.length; _i++) {
+  const elm = array[_i];
   console.log(elm);
 }
 
 let item;
-for (let _i2 = 0, _array = array; _i2 < _array.length; _i2++) {
-  const { item } = _array[_i2];
+for (let _i2 = 0, _array$map = array.map(item => ({ item })); _i2 < _array$map.length; _i2++) {
+  ({ item } = _array$map[_i2]);
+
   console.log(item);
 }
 ```
