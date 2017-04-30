@@ -4,10 +4,17 @@ export default function({types: t }) {
       const { scope } = path;
 
       const { left, right, body} = path.node;
-      const iterator = scope.maybeGenerateMemoised(right, true);
       const i = scope.generateUidIdentifier("i");
+      let array = scope.maybeGenerateMemoised(right, true);
 
-      const item = t.memberExpression(iterator, i, true);
+      const inits = [ t.variableDeclarator(i, t.numericLiteral(0)) ];
+      if (array) {
+        inits.push(t.variableDeclarator(array, right));
+      } else {
+        array = right;
+      }
+
+      const item = t.memberExpression(array, i, true);
       let assignment;
       if (t.isVariableDeclaration(left)) {
         assignment = left;
@@ -15,14 +22,12 @@ export default function({types: t }) {
       } else {
         assignment = t.expressionStatement(t.assignmentExpression("=", left, item));
       }
+
       path.get("body").unshiftContainer("body", assignment);
 
       path.replaceWith(t.forStatement(
-        t.variableDeclaration("let", [
-          t.variableDeclarator(i, t.numericLiteral(0)),
-          t.variableDeclarator(iterator, right),
-        ]),
-        t.binaryExpression("<", i, t.memberExpression(iterator, t.identifier("length"))),
+        t.variableDeclaration("let", inits),
+        t.binaryExpression("<", i, t.memberExpression(array, t.identifier("length"))),
         t.updateExpression("++", i),
         body
       ));
