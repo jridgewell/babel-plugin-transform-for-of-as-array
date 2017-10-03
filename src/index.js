@@ -27,7 +27,7 @@ export default function({types: t }) {
 
       path.replaceWith(t.forStatement(
         t.variableDeclaration("let", inits),
-        t.binaryExpression("<", i, t.memberExpression(array, t.identifier("length"))),
+        t.binaryExpression("<", i, t.memberExpression(t.clone(array), t.identifier("length"))),
         t.updateExpression("++", i),
         block
       ));
