@@ -13,7 +13,7 @@ export default function({types: t }) {
         array = right;
       }
 
-      const item = t.memberExpression(array, i, true);
+      const item = t.memberExpression(array, t.clone(i), true);
       let assignment;
       if (t.isVariableDeclaration(left)) {
         assignment = left;
@@ -27,8 +27,8 @@ export default function({types: t }) {
 
       path.replaceWith(t.forStatement(
         t.variableDeclaration("let", inits),
-        t.binaryExpression("<", i, t.memberExpression(t.clone(array), t.identifier("length"))),
-        t.updateExpression("++", i),
+        t.binaryExpression("<", t.clone(i), t.memberExpression(t.clone(array), t.identifier("length"))),
+        t.updateExpression("++", t.clone(i)),
         block
       ));
     }
