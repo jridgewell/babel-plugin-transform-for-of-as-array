@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-for-of-as-array",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Transform all for-of loops into the equivalent array for loop",
   "repository": "jridgewell/babel-plugin-transform-for-of-as-array",
   "author": "Justin Ridgewell <justin+github@ridgewell.name>",
